@@ -1,0 +1,75 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'io.clofy.saas.libs'
+version = '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly "org.projectlombok:lombok:1.18.34"
+    annotationProcessor "org.projectlombok:lombok:1.18.34"
+    implementation("ch.qos.logback:logback-classic:1.5.7")
+    implementation("org.apache.logging.log4j:log4j-to-slf4j:2.23.1")
+    implementation("org.slf4j:jul-to-slf4j:2.0.16")
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/clofy-io/microbase-outbox-saga")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//            pom {
+//                name = 'Clofy microbase library'
+//                description = 'Library for microservice development'
+//                url = 'https://clofy.io/library'
+//                licenses {
+//                    license {
+//                        name = 'The Apache License, Version 2.0'
+//                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                    }
+//                }
+//                developers {
+//                    developer {
+//                        id = 'alirezaalj'
+//                        name = 'Alireza Alijani'
+//                        email = 'alirezaalijani.ir@gmail.com'
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    repositories {
+//        maven {
+//            name = "LocalMavenRepo"
+//        }
+//    }
+//}
+
